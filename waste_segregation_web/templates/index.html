@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Mohan Babu University</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f0f0f0;
+      padding-top: 50px;
+    }
+    h1 { color: darkgreen; }
+    input[type="file"] { margin-top: 20px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+    #result { margin-top: 30px; font-size: 20px; color: navy; }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Mohan Babu University</h1>
+  <form id="upload-form">
+    <input type="file" id="image" name="image" required><br>
+    <button type="submit">Check Waste Type</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("upload-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var formData = new FormData();
+      var image = document.getElementById("image").files[0];
+      formData.append("image", image);
+
+      fetch("/predict", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("result").innerText = data.prediction;
+      })
+      .catch(err => {
+        document.getElementById("result").innerText = "Error: " + err;
+      });
+    });
+  </script>
+</body>
+</html>
